@@ -4,11 +4,11 @@ const wrapper = document.querySelector('.wrapper')
 const button = document.querySelector('#button')
 
 function generate() {
-    // Mettre wrapper à vide
+    // Mettre le wrapper à vide
     wrapper.innerHTML = ''
 
 
-    fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=8565a82cbb824636a7f9b75b960b1233&query=${query.value}&addRecipeInstructions=true&instructionsRequired=true`)
+    fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=8565a82cbb824636a7f9b75b960b1233&query=${query.value}&addRecipeInstructions=true&instructionsRequired=true&number=2`)
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -17,7 +17,7 @@ function generate() {
       data.results.forEach(function(oneResult){
         console.log(oneResult.id);
         const title = oneResult.title
-        fetch(`https://api.spoonacular.com/recipes/${oneResult.id}/information?apiKey=8565a82cbb824636a7f9b75b960b1233`)
+        fetch(`https://api.spoonacular.com/recipes/${oneResult.id}/information?apiKey=8565a82cbb824636a7f9b75b960b1233&includeNutrition=true`)
         .then(response => response.json())
         .then(data => {
         console.log(data);
@@ -31,21 +31,56 @@ function generate() {
         // Crée la div pour l'image
         const imageDiv = document.createElement("div");
         imageDiv.className = "image";
-        imageDiv.innerHTML = `<img src="${data.image}" alt="photo recette">`;
-
-        // Crée la div pour les ingrédients
+        imageDiv.innerHTML = `<img src="${data.image}" onerror="this.src='../img/pexels-karolina-grabowska-4033639.jpg'" alt="photo recette">`;
+      
+        // Crée une div pour les ingrédients
           const ingredientsDiv = document.createElement("ul");
           ingredientsDiv.className = "ingredients";
 
-          // En considérant que les ingrédients sont stockés dans un tableau d'objets dans la section 'recipe'
+          // En considérant que les ingrédients sont stockés dans un tableau d'objets dans la section 'extendedIngredients'
           data.extendedIngredients.forEach(function(oneIngredient){
             const ingredientElement = document.createElement("li");
-            ingredientElement.textContent = oneIngredient.name;
+            if (oneIngredient.measures.metric.amount < 1 ) {
+              ingredientElement.innerHTML = `1 ${oneIngredient.measures.metric.unitShort} <b>${oneIngredient.name}</b>`;
+            }
+            else {
+              ingredientElement.innerHTML = `${parseInt(oneIngredient.measures.metric.amount)} ${oneIngredient.measures.metric.unitShort} <b>${oneIngredient.name}</b>`;
+            }
+            
+            /*ingredientElement.textContent += oneIngredient.measures.metric.unitShort;
+            ingredientElement.textContent = oneIngredient.name;*/
             ingredientsDiv.appendChild(ingredientElement);
           })
-          const instructionsElement = document.createElement("div")
+
+          // Crée une div pour les instrucctions
+          const instructionsElement = document.createElement("ol")
           instructionsElement.className = "instructions";
-          instructionsElement.innerHTML = data.instructions;
+
+          if (data.analyzedInstructions[0].steps.length !== 1) {
+          // En considérant que les instructions sont stockés dans un tableau d'objets dans la section 'analyzedInstructions'
+          data.analyzedInstructions[0].steps.forEach(function(oneInstruction){
+              const instructionSingleElement = document.createElement("li");
+              instructionSingleElement.textContent = oneInstruction.step;
+              instructionsElement.appendChild(instructionSingleElement);
+            }); 
+          }
+          else {
+              const instructionSingleElement = document.createElement("p");
+              instructionSingleElement.textContent = data.analyzedInstructions[0].steps[0].step;
+              instructionsElement.appendChild(instructionSingleElement);
+          };
+          
+          //ajout des Indices Nutritionnels
+          const nutritionFacts = document.createElement("div")
+          instructionsElement.className = "nutrition-facts";
+
+          const calories = parseInt(data.nutrition.nutrients.find((element) => element.name === 'Calories').amount)
+          const fat = parseInt(data.nutrition.nutrients.find((element) => element.name === 'Fat').amount)
+          const sat_fat = parseInt(data.nutrition.nutrients.find((element) => element.name === 'Saturated Fat').amount)
+          const carbs = parseInt(data.nutrition.nutrients.find((element) => element.name === 'Carbohydrates').amount)
+
+          nutritionFacts.innerHTML = `<p>Energy : ${calories} kcal</p> <p>Fat : ${fat}g</p> <p>Saturated Fat : ${sat_fat}g</p> <p>Carbohydrates : ${carbs}g</p>`
+          
           // Ajoute imageDiv & ingredientsDiv au wrapper
           parentDiv.appendChild(imageDiv);
 
@@ -54,6 +89,8 @@ function generate() {
 
           ingredientsInstructionsDiv.appendChild(ingredientsDiv);
           ingredientsInstructionsDiv.appendChild(instructionsElement);
+          ingredientsInstructionsDiv.appendChild(nutritionFacts);
+
 
           parentDiv.appendChild(ingredientsInstructionsDiv);
 

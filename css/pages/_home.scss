@@ -83,11 +83,12 @@ form {
   color:#fff;
   display: flex;
   flex-direction: column;
-  gap:20px;
+ 
 
   .image-ingredients {
     display: flex;
     justify-content: flex-start;
+    gap: 20px;
   }
 
   .ingredients-instruction{
@@ -96,7 +97,7 @@ form {
     justify-content: flex-start;
     align-items: flex-start;
   }
-
+  
   img {
     max-width: 300px;
     object-fit: cover;

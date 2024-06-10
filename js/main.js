@@ -8,7 +8,7 @@ function generate() {
   wrapper.innerHTML = "";
 
   fetch(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=8565a82cbb824636a7f9b75b960b1233&query=${query.value}&addRecipeInstructions=true&instructionsRequired=true&number=${nbr.value}`
+    `https://api.spoonacular.com/recipes/complexSearch?apiKey=453ab6440cc240a285c62cf146a6c319&query=${query.value}&addRecipeInstructions=true&instructionsRequired=true&number=${nbr.value}`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -18,7 +18,7 @@ function generate() {
         console.log(oneResult.id);
         const title = oneResult.title;
         fetch(
-          `https://api.spoonacular.com/recipes/${oneResult.id}/information?apiKey=8565a82cbb824636a7f9b75b960b1233&includeNutrition=true`
+          `https://api.spoonacular.com/recipes/${oneResult.id}/information?apiKey=453ab6440cc240a285c62cf146a6c319&includeNutrition=true`
         )
           .then((response) => response.json())
           .then((data) => {
@@ -58,9 +58,14 @@ function generate() {
               ingredientsDiv.appendChild(ingredientElement);
             });
 
-            // Crée une div pour les instrucctions
-            const instructionsElement = document.createElement("ol");
-            instructionsElement.className = "instructions";
+            const instruction = document.createElement("details");
+            instruction.className = "instruction-block";
+            instruction.innerHTML = `<summary>Recipe</summary>`;
+
+            // Crée une div pour les instructions et on l'inclut dans instruction
+            const instructionsList = document.createElement("ol");
+            instructionsList.className = "instructions";
+            instruction.appendChild(instructionsList);
 
             if (data.analyzedInstructions[0].steps.length !== 1) {
               // En considérant que les instructions sont stockés dans un tableau d'objets dans la section 'analyzedInstructions'
@@ -69,18 +74,18 @@ function generate() {
               ) {
                 const instructionSingleElement = document.createElement("li");
                 instructionSingleElement.textContent = oneInstruction.step;
-                instructionsElement.appendChild(instructionSingleElement);
+                instructionsList.appendChild(instructionSingleElement);
               });
             } else {
               const instructionSingleElement = document.createElement("p");
               instructionSingleElement.textContent =
                 data.analyzedInstructions[0].steps[0].step;
-              instructionsElement.appendChild(instructionSingleElement);
+              instructionsList.appendChild(instructionSingleElement);
             }
 
             //ajout des Indices Nutritionnels
             const nutritionFacts = document.createElement("div");
-            instructionsElement.className = "nutrition-facts";
+            nutritionFacts.className = "nutrition-facts";
 
             const calories = parseInt(
               data.nutrition.nutrients.find(
@@ -111,7 +116,7 @@ function generate() {
             ingredientsInstructionsDiv.className = "ingredients-instruction";
 
             ingredientsInstructionsDiv.appendChild(ingredientsDiv);
-            ingredientsInstructionsDiv.appendChild(instructionsElement);
+            ingredientsInstructionsDiv.appendChild(instruction);
             ingredientsInstructionsDiv.appendChild(nutritionFacts);
 
             parentDiv.appendChild(ingredientsInstructionsDiv);
@@ -145,4 +150,4 @@ button.addEventListener("click", function () {
   generate();
 });
 
-/*https://api.spoonacular.com/recipes/complexSearch?apiKey=8565a82cbb824636a7f9b75b960b1233&query=pasta&addRecipeInstructions=true&instructionsRequired=true*/
+/*https://api.spoonacular.com/recipes/complexSearch?apiKey=453ab6440cc240a285c62cf146a6c319&query=pasta&addRecipeInstructions=true&instructionsRequired=true*/

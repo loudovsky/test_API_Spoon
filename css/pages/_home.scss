@@ -1,16 +1,20 @@
 body {
-  background:rgb(35, 35, 35);
-  background: url('../img/pattern_wallpaper.png') center/contain;
+  background: rgb(35, 35, 35);
+  background: url("../img/pattern_wallpaper.png") center/contain;
   &::before {
-    content:'';
-    background:url('../img/cat-nyan-cat.gif');
+    content: "";
+    background: url("../img/cat-nyan-cat.gif");
     width: 200px;
     height: 200px;
     position: absolute;
-    top:0;
-    left:0;
-    transform:rotate(45deg) translate(-25%,-10%);
+    top: 0;
+    left: 0;
+    transform: rotate(45deg) translate(-25%, -10%);
   }
+}
+
+:root {
+  --animate-delay: 2s;
 }
 .container {
   background-color: #000;
@@ -18,13 +22,13 @@ body {
   margin: 10vh auto;
   border-radius: 10px;
   padding: 50px 0;
-  box-shadow: -47px 18px 64px -26px rgba(0,0,0,0.43);
+  box-shadow: -47px 18px 64px -26px rgba(0, 0, 0, 0.43);
 }
 
 h1 {
-  font-family: 'Itim', cursive;
+  font-family: "Itim", cursive;
   text-align: center;
-  color:#fff;
+  color: #fff;
   font-size: 50px;
   font-weight: normal;
   margin-top: 0;
@@ -40,50 +44,49 @@ form {
   text-align: center;
   div {
     display: flex;
-    justify-content:center;
-    align-items:center;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 15px;
-    color:#fff;
-    font-family: 'Itim', cursive;
+    color: #fff;
+    font-family: "Itim", cursive;
   }
   input {
-    font-family: 'Itim', cursive;
-    padding:10px 30px;
-    border:0;
-    margin:0;
+    font-family: "Itim", cursive;
+    padding: 10px 30px;
+    border: 0;
+    margin: 0;
     display: inline-block;
     &[type="text"] {
-      border-radius:5px 0 0 5px;
+      border-radius: 5px 0 0 5px;
       width: 20%;
       &:focus {
-        background:yellow;
-        outline:none;
+        background: yellow;
+        outline: none;
       }
     }
     &[type="button"] {
-      border-radius:0 5px 5px 0;
-      cursor:pointer;
-      background:deeppink;
-      color:#fff;
-      transition:.3s all ease-in-out;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      background: deeppink;
+      color: #fff;
+      transition: 0.3s all ease-in-out;
       &:hover {
-        background:darken(deeppink, 10%);
+        background: darken(deeppink, 10%);
       }
     }
   }
   select {
-    border-radius:5px;
+    border-radius: 5px;
     margin-left: 10px;
   }
 }
 .wrapper {
-  font-family: 'Itim', cursive;
-  max-width:1000px;
-  margin:100px auto;
-  color:#fff;
+  font-family: "Itim", cursive;
+  max-width: 1000px;
+  margin: 100px auto;
+  color: #fff;
   display: flex;
   flex-direction: column;
- 
 
   .image-ingredients {
     display: flex;
@@ -91,13 +94,13 @@ form {
     gap: 20px;
   }
 
-  .ingredients-instruction{
+  .ingredients-instruction {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
   }
-  
+
   img {
     max-width: 300px;
     object-fit: cover;
@@ -105,7 +108,6 @@ form {
   }
 
   h3 {
-    
   }
 
   ul {

@@ -8,7 +8,7 @@ function generate() {
   wrapper.innerHTML = "";
 
   fetch(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=453ab6440cc240a285c62cf146a6c319&query=${query.value}&addRecipeInstructions=true&instructionsRequired=true&number=${nbr.value}`
+    `https://api.spoonacular.com/recipes/complexSearch?apiKey=8565a82cbb824636a7f9b75b960b1233&query=${query.value}&addRecipeInstructions=true&instructionsRequired=true&number=${nbr.value}`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -16,9 +16,9 @@ function generate() {
 
       data.results.forEach(function (oneResult) {
         console.log(oneResult.id);
-        const title = oneResult.title;
+        const title = oneResult.title.charAt(0).toUpperCase() + oneResult.title.slice(1);
         fetch(
-          `https://api.spoonacular.com/recipes/${oneResult.id}/information?apiKey=453ab6440cc240a285c62cf146a6c319&includeNutrition=true`
+          `https://api.spoonacular.com/recipes/${oneResult.id}/information?apiKey=8565a82cbb824636a7f9b75b960b1233&includeNutrition=true`
         )
           .then((response) => response.json())
           .then((data) => {
@@ -44,13 +44,13 @@ function generate() {
             data.extendedIngredients.forEach(function (oneIngredient) {
               const ingredientElement = document.createElement("li");
               if (oneIngredient.measures.metric.amount < 1) {
-                ingredientElement.innerHTML = `1 ${oneIngredient.measures.metric.unitShort} <b>${oneIngredient.name}</b>`;
+                ingredientElement.innerHTML = `<b>1 ${oneIngredient.measures.metric.unitShort}</b> ${oneIngredient.name}`;
               } else {
-                ingredientElement.innerHTML = `${parseInt(
+                ingredientElement.innerHTML = `<b>${parseInt(
                   oneIngredient.measures.metric.amount
-                )} ${oneIngredient.measures.metric.unitShort} <b>${
+                )} ${oneIngredient.measures.metric.unitShort}</b> ${
                   oneIngredient.name
-                }</b>`;
+                }`;
               }
 
               /*ingredientElement.textContent += oneIngredient.measures.metric.unitShort;
@@ -62,7 +62,7 @@ function generate() {
             instruction.className = "instruction-block";
             instruction.innerHTML = `<summary>Recipe</summary>`;
 
-            // Crée une div pour les instructions et on l'inclut dans instruction
+            // Crée une div pour les instructions. On l'inclut dans instruction
             const instructionsList = document.createElement("ol");
             instructionsList.className = "instructions";
             instruction.appendChild(instructionsList);
@@ -106,8 +106,13 @@ function generate() {
                 (element) => element.name === "Carbohydrates"
               ).amount
             );
+            const prot = parseInt(
+              data.nutrition.nutrients.find(
+                (element) => element.name === "Protein"
+              ).amount
+            );
 
-            nutritionFacts.innerHTML = `<p>Energy : ${calories} kcal</p> <p>Fat : ${fat}g</p> <p>Saturated Fat : ${sat_fat}g</p> <p>Carbohydrates : ${carbs}g</p>`;
+            nutritionFacts.innerHTML = `<p><span>Energy</span> ${calories} kcal</p> <p><span>Fat</span> ${fat}g</p> <p><span>Saturated Fat</span> ${sat_fat}g</p> <p><span>Carbohydrates</span> ${carbs}g</p> <p><span>Protein</span> ${prot}g</p>`;
 
             // Ajoute imageDiv & ingredientsDiv au wrapper
             parentDiv.appendChild(imageDiv);
@@ -150,4 +155,4 @@ button.addEventListener("click", function () {
   generate();
 });
 
-/*https://api.spoonacular.com/recipes/complexSearch?apiKey=453ab6440cc240a285c62cf146a6c319&query=pasta&addRecipeInstructions=true&instructionsRequired=true*/
+/*https://api.spoonacular.com/recipes/complexSearch?apiKey=8565a82cbb824636a7f9b75b960b1233&query=pasta&addRecipeInstructions=true&instructionsRequired=true*/

@@ -17,7 +17,7 @@ function generate() {
       data.results.forEach(function (oneResult) {
         console.log(oneResult.id);
         // On s'assure que la 1ère lettre de chaque titre soit en majuscule
-        const title = oneResult.title.charAt(0).toUpperCase() + oneResult.title.slice(1);
+        const recipeTitle = oneResult.title.charAt(0).toUpperCase() + oneResult.title.slice(1);
         fetch(
           `https://api.spoonacular.com/recipes/${oneResult.id}/information?apiKey=8565a82cbb824636a7f9b75b960b1233&includeNutrition=true`
         )
@@ -25,7 +25,7 @@ function generate() {
           .then((data) => {
             console.log(data);
 
-            wrapper.innerHTML += `<h3><a href="${data.sourceUrl}" target="_blank" data-aos="fade-left">${title}</a></h3>`;
+            wrapper.innerHTML += `<h3><a href="${data.sourceUrl}" target="_blank" data-aos="fade-left">${recipeTitle}</a></h3>`;
             // Ajoute une classe parente qui contiendra la div image et la div recipe
             const parentDiv = document.createElement("div");
             parentDiv.className = "image-ingredients";

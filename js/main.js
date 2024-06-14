@@ -2,6 +2,9 @@ const query = document.querySelector("#gifToSearch");
 const nbr = document.querySelector("select");
 const wrapper = document.querySelector(".wrapper");
 const button = document.querySelector("#button");
+let xValues = ["protein", "fat", "carbohydrates"];
+let yValues = [20, 30, 50];
+let barColors = ["orange", "green","blue"];
 
 function generate() {
   // Mettre le wrapper à vide
@@ -114,6 +117,26 @@ function generate() {
             );
 
             nutritionFacts.innerHTML = `<p><span>Energy</span> ${calories} kcal</p> <p><span>Fat</span> ${fat}g</p> <p><span>Saturated Fat</span> ${sat_fat}g</p> <p><span>Carbohydrates</span> ${carbs}g</p> <p><span>Protein</span> ${prot}g</p>`;
+            
+            // Données pourcentage nutritionnelles
+            const nutritionPercentCanvas = document.createElement("canvas")
+            nutritionPercentCanvas.id = 'myChart'
+            
+            function maSousFonction() {
+              const proteinPc = data.nutrition.caloricBreakdown.percentProtein
+              const fatPc = data.nutrition.caloricBreakdown.percentFat
+              const carbsPc = data.nutrition.caloricBreakdown.percentCarbs
+  
+              xValues = ["protein", "fat", "carbohydrates"]
+              yValues = [proteinPc, fatPc, carbsPc]
+              barColors = ["orange", "green","blue"]
+              console.log(yValues)
+             }
+              
+  
+              maSousFonction()
+              // return { xValues, yValues, barColors }
+            console.log(yValues)
 
             // Ajoute imageDiv & ingredientsDiv au wrapper
             parentDiv.appendChild(imageDiv);
@@ -124,14 +147,12 @@ function generate() {
             ingredientsInstructionsDiv.appendChild(ingredientsDiv);
             ingredientsInstructionsDiv.appendChild(instruction);
             ingredientsInstructionsDiv.appendChild(nutritionFacts);
+            ingredientsInstructionsDiv.appendChild(nutritionPercentCanvas);
 
             parentDiv.appendChild(ingredientsInstructionsDiv);
 
             // Ajoute la div parente au conteneur principal (wrapper)
             wrapper.appendChild(parentDiv);
-
-            /*data.recipes.forEach(function(oneImage){
-          wrapper.innerHTML += ${oneImage.instructions}; */
           })
           .catch((error) => {
             console.log("Erreur lors de la récup des données :", error);
@@ -157,3 +178,22 @@ button.addEventListener("click", function () {
 });
 
 /*https://api.spoonacular.com/recipes/complexSearch?apiKey=8565a82cbb824636a7f9b75b960b1233&query=pasta&addRecipeInstructions=true&instructionsRequired=true*/
+
+console.log(xValues)
+
+new Chart("myChart", {
+  type: "pie",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "World Wide Wine Production"
+    }
+  }
+});
